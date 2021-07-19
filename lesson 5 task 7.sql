@@ -1,3 +1,4 @@
+-- Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели. Следует учесть, что необходимы дни недели текущего года, а не года рождения.
 DROP DATABASE IF EXISTS vk7;
 CREATE DATABASE vk7;
 USE vk7;
@@ -9,7 +10,6 @@ CREATE TABLE users(
 	created_at DATETIME DEFAULT now(),
 	birthday DATE NOT NULL
 );
-
 
 insert into users (id, first_name, last_name, created_at, birthday) 
 values (1, 'Tessie', 'Murdy', DEFAULT, '2001-08-12');
@@ -31,35 +31,3 @@ values (8, 'Belle', 'Gorgon', DEFAULT, '2021-07-19');
 select dayname(birthday) from users; 
 
 select (dayname(birthday)) as days, count(dayname(birthday)) from users group by days;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
