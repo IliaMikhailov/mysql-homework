@@ -1,3 +1,4 @@
+-- Из таблицы users необходимо извлечь пользователей, родившихся в августе и мае. Месяцы заданы в виде списка английских названий (may, august)
 DROP DATABASE IF EXISTS vk4;
 CREATE DATABASE vk4;
 USE vk4;
@@ -26,33 +27,3 @@ insert into users (id, first_name, last_name, created_at, birthday_month)
 values (7, 'Celle', 'Morgon', DEFAULT, 'september');
 
 SELECT * FROM users WHERE birthday_month = 'may' OR birthday_month = 'august';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
