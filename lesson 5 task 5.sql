@@ -1,3 +1,4 @@
+-- Из таблицы catalogs извлекаются записи при помощи запроса. SELECT * FROM catalogs WHERE id IN (5, 1, 2); Отсортируйте записи в порядке, заданном в списке IN.
 DROP DATABASE IF EXISTS task_5_5;
 CREATE DATABASE task_5_5;
 USE task_5_5;
@@ -17,34 +18,3 @@ VALUES (1, 'first'),
 		(7, 'seventh');
 
 SELECT * FROM catalogs WHERE id IN(5, 1, 2) order by catalog_name;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
