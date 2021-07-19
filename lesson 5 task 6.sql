@@ -1,3 +1,4 @@
+-- Подсчитайте средний возраст пользователей в таблице users.
 DROP DATABASE IF EXISTS vk6;
 CREATE DATABASE vk6;
 USE vk6;
@@ -29,34 +30,3 @@ values (7, 'Celle', 'Morgon', DEFAULT, '2000-01-05');
 select TIMESTAMPDIFF(YEAR, birthday, NOW()) AS age from users;
 
 SELECT AVG(TIMESTAMPDIFF(YEAR, birthday, NOW())) AS average_age from users;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
