@@ -10,12 +10,3 @@ join users on users.id = orders.user_id;
 SELECT name FROM catalogs WHERE name like 'Процессор%'
 union 
 SELECT name FROM products WHERE desription like 'Процессор%';
-
-
-
-
-
-
-
-
-
