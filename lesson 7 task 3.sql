@@ -40,8 +40,3 @@ from flights as f
 	join cities as fr on f.fro = fr.label
 	join cities as fi on f.too = fi.label
 order by id;
-
-select * from flights;
-
-
-
