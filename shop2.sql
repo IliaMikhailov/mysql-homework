@@ -1,3 +1,4 @@
+-- Файл учебной БД
 DROP DATABASE IF EXISTS Task_7_2;
 CREATE DATABASE Task_7_2;
 USE Task_7_2;
