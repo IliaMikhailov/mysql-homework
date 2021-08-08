@@ -13,6 +13,7 @@ DROP PROCEDURE IF EXISTS add_users ;
 delimiter //
 CREATE PROCEDURE add_users ()
 BEGIN
+-- для миллиона меняем значение i на миллион
 	DECLARE i INT DEFAULT 50;
 	WHILE i > 0 DO
 		INSERT INTO users(name) VALUES (i);
