@@ -26,10 +26,10 @@ BEGIN
 	END IF;	
 END //
 DELIMITER ;
--- пробное добавление продукции
+-- РїСЂРѕР±РЅРѕРµ РґРѕР±Р°РІР»РµРЅРёРµ РїСЂРѕРґСѓРєС†РёРё
 CALL add_production('711112.001', 350, 1);
 
--- для проверки результата добавления
+-- РґР»СЏ РїСЂРѕРІРµСЂРєРё СЂРµР·СѓР»СЊС‚Р°С‚Р° РґРѕР±Р°РІР»РµРЅРёСЏ
 -- SELECT  @tran_result;
 -- select * from production p where tech_name = '711112.001';
 
@@ -37,7 +37,7 @@ CREATE or replace VIEW view_summ_of_utilisation
 AS
 select dp.tech_name, dp.number_in_shipment * p.cost from defect_production dp
 	join production p on p.tech_name = dp.tech_name 
-where solution = 'Выставить рекламацию. Списать и утилизировать' or 'Списать и утилизировать';
+where solution = 'Р’С‹СЃС‚Р°РІРёС‚СЊ СЂРµРєР»Р°РјР°С†РёСЋ. РЎРїРёСЃР°С‚СЊ Рё СѓС‚РёР»РёР·РёСЂРѕРІР°С‚СЊ' or 'РЎРїРёСЃР°С‚СЊ Рё СѓС‚РёР»РёР·РёСЂРѕРІР°С‚СЊ';
  
 SELECT * FROM view_last_date_solutions;
 
@@ -78,5 +78,3 @@ FOR EACH ROW
 		END IF;
 	END //
 delimiter ;
-
-
