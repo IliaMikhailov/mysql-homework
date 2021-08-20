@@ -5,12 +5,12 @@ delimiter //
 CREATE TRIGGER check_incoming_to_warehouse after insert ON warehouse
 FOR EACH ROW
 	begin
-			-- запоминаем нужно ли проводить контроль этой позиции или нет
+			-- Р·Р°РїРѕРјРёРЅР°РµРј РЅСѓР¶РЅРѕ Р»Рё РїСЂРѕРІРѕРґРёС‚СЊ РєРѕРЅС‚СЂРѕР»СЊ СЌС‚РѕР№ РїРѕР·РёС†РёРё РёР»Рё РЅРµС‚
 			set @need_ic := (select if ((SELECT inc_control_need FROM production WHERE tech_name = 
 			(select tech_name from warehouse where date_of_custom = new.date_of_custom)) = 1, 1, 0) as vk);
-			-- запоминаем имя позиции
+			-- Р·Р°РїРѕРјРёРЅР°РµРј РёРјСЏ РїРѕР·РёС†РёРё
 			set @tech_name_ic := (select tech_name from warehouse where date_of_custom = new.date_of_custom);
-  			-- добавляем логи переноса с одного склада на другой
+  			-- РґРѕР±Р°РІР»СЏРµРј Р»РѕРіРё РїРµСЂРµРЅРѕСЃР° СЃ РѕРґРЅРѕРіРѕ СЃРєР»Р°РґР° РЅР° РґСЂСѓРіРѕР№
   			INSERT into logs (from_table, to_table, tech_name) select 'warehouse', (if (@need_ic = 1,'incoming_control','factory')), @tech_name_ic; 		
 	END //
 delimiter ;
