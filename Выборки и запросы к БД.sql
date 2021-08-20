@@ -1,112 +1,85 @@
 USE smk;
 
--- детали по которым уже есть решение применить отправляем на завод
+-- РґРµС‚Р°Р»Рё РїРѕ РєРѕС‚РѕСЂС‹Рј СѓР¶Рµ РµСЃС‚СЊ СЂРµС€РµРЅРёРµ РїСЂРёРјРµРЅРёС‚СЊ РѕС‚РїСЂР°РІР»СЏРµРј РЅР° Р·Р°РІРѕРґ
 START TRANSACTION;
 INSERT INTO smk.factory  
 SELECT tech_name, shipment, number_in_shipment
 	FROM defect_production 
-	WHERE solution = 'Выставить рекламацию. Применить' or solution = 'Применить';
+	WHERE solution = 'Р’С‹СЃС‚Р°РІРёС‚СЊ СЂРµРєР»Р°РјР°С†РёСЋ. РџСЂРёРјРµРЅРёС‚СЊ' or solution = 'РџСЂРёРјРµРЅРёС‚СЊ';
 COMMIT;
 
--- количество деталей которое сейчас на производстве
+-- РєРѕР»РёС‡РµСЃС‚РІРѕ РґРµС‚Р°Р»РµР№ РєРѕС‚РѕСЂРѕРµ СЃРµР№С‡Р°СЃ РЅР° РїСЂРѕРёР·РІРѕРґСЃС‚РІРµ
 select tech_name, sum(number_in_shipment) from factory f 
 group by tech_name;
 
--- детали которые поставляет конкретный поставщик
+-- РґРµС‚Р°Р»Рё РєРѕС‚РѕСЂС‹Рµ РїРѕСЃС‚Р°РІР»СЏРµС‚ РєРѕРЅРєСЂРµС‚РЅС‹Р№ РїРѕСЃС‚Р°РІС‰РёРє
 select tech_name from warehouse
 where suplier_name = 'Crist Group'
 group by tech_name;
 
--- детали которые чаще всего браковали
+-- РґРµС‚Р°Р»Рё РєРѕС‚РѕСЂС‹Рµ С‡Р°С‰Рµ РІСЃРµРіРѕ Р±СЂР°РєРѕРІР°Р»Рё
 select tech_name, count(shipment) as most_defective from defect_production
 group by tech_name
 order by most_defective desc
 limit 10;
 
--- какие поставщики поставляют самую часто бракованную деталь
+-- РєР°РєРёРµ РїРѕСЃС‚Р°РІС‰РёРєРё РїРѕСЃС‚Р°РІР»СЏСЋС‚ СЃР°РјСѓСЋ С‡Р°СЃС‚Рѕ Р±СЂР°РєРѕРІР°РЅРЅСѓСЋ РґРµС‚Р°Р»СЊ
 select suplier_name from warehouse w 
 where tech_name = '711111.063'
 group by suplier_name;
 
--- проверим были ли проблемы по друугим позициям с этим поставщиком
+-- РїСЂРѕРІРµСЂРёРј Р±С‹Р»Рё Р»Рё РїСЂРѕР±Р»РµРјС‹ РїРѕ РґСЂСѓСѓРіРёРј РїРѕР·РёС†РёСЏРј СЃ СЌС‚РёРј РїРѕСЃС‚Р°РІС‰РёРєРѕРј
 select dp.tech_name ,dp.shipment, dp.type_of_defect, w.suplier_name from defect_production dp
 	join warehouse w on dp.shipment = w.shipment
 where suplier_name = 'Bergnaum-Kertzmann'
 group by type_of_defect ;
 
--- деталь котору чаще всего браковали с типом выявленного несоответствия
+-- РґРµС‚Р°Р»СЊ РєРѕС‚РѕСЂСѓ С‡Р°С‰Рµ РІСЃРµРіРѕ Р±СЂР°РєРѕРІР°Р»Рё СЃ С‚РёРїРѕРј РІС‹СЏРІР»РµРЅРЅРѕРіРѕ РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ
 select tech_name, type_of_defect, shipment from defect_production dp 
 where tech_name = '711111.063';
 
--- типы несоответствий выявленный у конкретного поставщика
+-- С‚РёРїС‹ РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІРёР№ РІС‹СЏРІР»РµРЅРЅС‹Р№ Сѓ РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РїРѕСЃС‚Р°РІС‰РёРєР°
 select dp.tech_name ,dp.shipment, dp.type_of_defect, w.suplier_name from defect_production dp
 	join warehouse w on dp.shipment = w.shipment
 where suplier_name = 'Blick-Bode'
 group by type_of_defect ;
 
--- список поставщиков по количеству несоответствующей продукции поступившей на входной контроль
+-- СЃРїРёСЃРѕРє РїРѕСЃС‚Р°РІС‰РёРєРѕРІ РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµР№ РїСЂРѕРґСѓРєС†РёРё РїРѕСЃС‚СѓРїРёРІС€РµР№ РЅР° РІС…РѕРґРЅРѕР№ РєРѕРЅС‚СЂРѕР»СЊ
 select suplier_name, count(dp.shipment) as number_ship from warehouse w 
 	join defect_production dp on dp.shipment = w.shipment 
 group by suplier_name
 order by number_ship desc;
 
--- поставщик с наибольшим количеством несоответствующей продукции
+-- РїРѕСЃС‚Р°РІС‰РёРє СЃ РЅР°РёР±РѕР»СЊС€РёРј РєРѕР»РёС‡РµСЃС‚РІРѕРј РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµР№ РїСЂРѕРґСѓРєС†РёРё
 select suplier_name, count(dp.shipment) as number_ship from warehouse w 
 	join defect_production dp on dp.shipment = w.shipment 
 group by suplier_name
 order by number_ship desc
 limit 1;
 
--- распределение несоответствий по типам
+-- СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІРёР№ РїРѕ С‚РёРїР°Рј
 select type_of_defect, count(shipment) as numbers from defect_production dp
 group by type_of_defect
 order by numbers desc;
 
--- поставщики чаще всего присылающие продукцию с конкретным типом несоответствия
+-- РїРѕСЃС‚Р°РІС‰РёРєРё С‡Р°С‰Рµ РІСЃРµРіРѕ РїСЂРёСЃС‹Р»Р°СЋС‰РёРµ РїСЂРѕРґСѓРєС†РёСЋ СЃ РєРѕРЅРєСЂРµС‚РЅС‹Рј С‚РёРїРѕРј РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ
 select  w.suplier_name, count(type_of_defect) as numbers from warehouse w
 	join defect_production dp on dp.shipment = w.shipment
-where type_of_defect = 'Габаритный размер не соответствует КД'
+where type_of_defect = 'Р“Р°Р±Р°СЂРёС‚РЅС‹Р№ СЂР°Р·РјРµСЂ РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РљР”'
 group by suplier_name 
 order by numbers desc;
 
--- распределение несоответствий по типам (NULL - решение по ним не принято)
+-- СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РЅРµСЃРѕРѕС‚РІРµС‚СЃС‚РІРёР№ РїРѕ С‚РёРїР°Рј (NULL - СЂРµС€РµРЅРёРµ РїРѕ РЅРёРј РЅРµ РїСЂРёРЅСЏС‚Рѕ)
 select solution, count(shipment) as numbers from defect_production dp
 group by solution
 order by numbers desc;
 
--- списанные номенклатуры и их общая стоимость
+-- СЃРїРёСЃР°РЅРЅС‹Рµ РЅРѕРјРµРЅРєР»Р°С‚СѓСЂС‹ Рё РёС… РѕР±С‰Р°СЏ СЃС‚РѕРёРјРѕСЃС‚СЊ
 select dp.tech_name, dp.number_in_shipment * p.cost from defect_production dp
 	join production p on p.tech_name = dp.tech_name 
-where solution = 'Выставить рекламацию. Списать и утилизировать';
+where solution = 'Р’С‹СЃС‚Р°РІРёС‚СЊ СЂРµРєР»Р°РјР°С†РёСЋ. РЎРїРёСЃР°С‚СЊ Рё СѓС‚РёР»РёР·РёСЂРѕРІР°С‚СЊ';
 
--- общая сумма списанных номенклатур
+-- РѕР±С‰Р°СЏ СЃСѓРјРјР° СЃРїРёСЃР°РЅРЅС‹С… РЅРѕРјРµРЅРєР»Р°С‚СѓСЂ
 select sum(dp.number_in_shipment * p.cost) as summ from defect_production dp
 	join production p on p.tech_name = dp.tech_name 
-where solution = 'Выставить рекламацию. Списать и утилизировать' or solution = 'Списать и утилизировать';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+where solution = 'Р’С‹СЃС‚Р°РІРёС‚СЊ СЂРµРєР»Р°РјР°С†РёСЋ. РЎРїРёСЃР°С‚СЊ Рё СѓС‚РёР»РёР·РёСЂРѕРІР°С‚СЊ' or solution = 'РЎРїРёСЃР°С‚СЊ Рё СѓС‚РёР»РёР·РёСЂРѕРІР°С‚СЊ';
